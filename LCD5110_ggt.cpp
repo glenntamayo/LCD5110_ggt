@@ -10,13 +10,37 @@ LCD5110_ggt::LCD5110_ggt(){
 	
 }
 
-LCD5110_ggt::begin(byte _dcPin, byte _scePin, byte _rstPin, byte _blPin, byte _sdinPin, byte _sclkPin){
-	dcPin = _dcPin;
-	scePin = _scePin;
-	rstPin = _rstPin;
-	blPin = _blPin;
-	sdinPin = _sdinPin;
-	sclkPin = _sclkPin;
+void LCD5110_ggt::begin(byte _dcPin, byte _scePin, byte _rstPin, byte _blPin, byte _sdinPin, byte _sclkPin) {
+  dcPin = _dcPin;
+  scePin = _scePin;
+  rstPin = _rstPin;
+  blPin = _blPin;
+  sdinPin = _sdinPin;
+  sclkPin = _sclkPin;
+	
+  //Configure control pins
+  pinMode(scePin, OUTPUT);
+  pinMode(rstPin, OUTPUT);
+  pinMode(dcPin, OUTPUT);
+  pinMode(sdinPin, OUTPUT);
+  pinMode(sclkPin, OUTPUT);
+  pinMode(blPin, OUTPUT);
+
+  SPI.begin();
+  SPI.setDataMode(SPI_MODE0);
+  SPI.setBitOrder(MSBFIRST);
+
+  //Reset the LCD to a known state
+  digitalWrite(rstPin, LOW);
+  digitalWrite(rstPin, HIGH);
+
+  LCDWrite(LCD_COMMAND, 0x21); //Tell LCD extended commands follow
+  LCDWrite(LCD_COMMAND, 0xB0); //Set LCD Vop (Contrast)
+  LCDWrite(LCD_COMMAND, 0x04); //Set Temp coefficent
+  LCDWrite(LCD_COMMAND, 0x14); //LCD bias mode 1:48 (try 0x13)
+  //We must send 0x20 before modifying the display control mode
+  LCDWrite(LCD_COMMAND, 0x20);
+  LCDWrite(LCD_COMMAND, 0x0C); //Set display control, normal mode.
 }
 
 void LCD5110_ggt::LCDWrite(byte data_or_command, byte data)
@@ -285,32 +309,7 @@ void LCD5110_ggt::invertDisplay()
   updateDisplay();
 }
 
-void LCD5110_ggt::begin(int _brightness) {
-  //Configure control pins
-  pinMode(scePin, OUTPUT);
-  pinMode(rstPin, OUTPUT);
-  pinMode(dcPin, OUTPUT);
-  pinMode(sdinPin, OUTPUT);
-  pinMode(sclkPin, OUTPUT);
-  pinMode(blPin, OUTPUT);
-  analogWrite(blPin, _brightness);
 
-  SPI.begin();
-  SPI.setDataMode(SPI_MODE0);
-  SPI.setBitOrder(MSBFIRST);
-
-  //Reset the LCD to a known state
-  digitalWrite(rstPin, LOW);
-  digitalWrite(rstPin, HIGH);
-
-  LCDWrite(LCD_COMMAND, 0x21); //Tell LCD extended commands follow
-  LCDWrite(LCD_COMMAND, 0xB0); //Set LCD Vop (Contrast)
-  LCDWrite(LCD_COMMAND, 0x04); //Set Temp coefficent
-  LCDWrite(LCD_COMMAND, 0x14); //LCD bias mode 1:48 (try 0x13)
-  //We must send 0x20 before modifying the display control mode
-  LCDWrite(LCD_COMMAND, 0x20);
-  LCDWrite(LCD_COMMAND, 0x0C); //Set display control, normal mode.
-}
 
 /* This function serves as a fun demo of the graphics driver
 functions below. */

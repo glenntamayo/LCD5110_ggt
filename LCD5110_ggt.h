@@ -300,9 +300,6 @@ class LCD5110_ggt {
 	you please. */
 	void invertDisplay();
 
-	//This sends the magical commands to the PCD8544
-	void begin(int);
-
 	/* This function serves as a fun demo of the graphics driver
 	functions below. */
 	void funTime();
