@@ -6,7 +6,11 @@
 #include <Arduino.h>
 #include "LCD5110_ggt.h"
 
-LCD5110_ggt::LCD5110_ggt(byte _dcPin, byte _scePin, byte _rstPin, byte _blPin, byte _sdinPin, byte _sclkPin){
+LCD5110_ggt::LCD5110_ggt(){
+	
+}
+
+LCD5110_ggt::begin(byte _dcPin, byte _scePin, byte _rstPin, byte _blPin, byte _sdinPin, byte _sclkPin){
 	dcPin = _dcPin;
 	scePin = _scePin;
 	rstPin = _rstPin;

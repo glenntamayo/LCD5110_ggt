@@ -158,7 +158,8 @@ static const char xkcdSandwich[504] PROGMEM = {
 class LCD5110_ggt {
 	
 	public:
-		LCD5110_ggt(byte, byte, byte, byte, byte, byte);
+		LCD5110_ggt();
+		void begin(byte, byte, byte, byte, byte, byte);
 		byte dcPin, scePin, rstPin, blPin, sdinPin, sclkPin;	
 	
 
